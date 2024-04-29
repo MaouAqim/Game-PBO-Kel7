@@ -11,20 +11,20 @@ import os
 FPS=60
 WIDTH=1000
 HEIGHT=600
-RED = (255, 0, 0)
+RED = (255, 255, 255, 255)
 
 #class pygame (Class Utama/Parent)
 pygame.init()
 layar = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Starborne Strife")
 fps = pygame.time.Clock()
-background = pygame.image.load(os.path.abspath("image/backgroundgame.png"))
+background = pygame.image.load(os.path.abspath("image/bg.png"))
 
 #Class Player(Class Child)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image=pygame.transform.scale(image.player,(100,115))
+        self.image=pygame.transform.scale(image.player,(145,115))
         self.rect=self.image.get_rect()
         self.rect.centerx = WIDTH/2
         self.rect.bottom=HEIGHT - 20
@@ -85,16 +85,16 @@ class Player(pygame.sprite.Sprite):
                 sound.missile.play()  
     
     def show_lifepoints(self):
-        draw_text(layar, f"life points : {self.life}", 20, WIDTH-80, HEIGHT-590)
+        draw_text(layar, f"life points : {self.life}", 20, WIDTH-115, HEIGHT-590)
 
     def show_score(self):
-        draw_text(layar, f"Score : {self.score_val}", 20, WIDTH-950, HEIGHT-590)
+        draw_text(layar, f"Score : {self.score_val}", 20, WIDTH-920, HEIGHT-590)
 
-#Class Troops atau Lawan
-class Troops(pygame.sprite.Sprite):
+#Class Musuh atau Lawan
+class Ufo(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image=pygame.transform.scale(image.troops,(80,95))
+        self.image=pygame.transform.scale(image.ufo,(80,95))
         self.rect=self.image.get_rect()
         self.radius=self.rect.width*0.1/2
         self.rect.x=random.randrange(0,WIDTH-self.rect.width)
@@ -116,7 +116,7 @@ class Troops(pygame.sprite.Sprite):
 class Button(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(image.button,(20,35))
+        self.image = pygame.transform.scale(image.button,(35,55))
         self.rect = self.image.get_rect()
         self.radius=self.rect.width*0.1/2
         self.rect.x=random.randrange(0,WIDTH-self.rect.width)
@@ -133,7 +133,7 @@ class Button(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,position:pygame.Vector2,angle:float=-90):
         pygame.sprite.Sprite.__init__(self)
-        self.image=pygame.transform.rotate(pygame.transform.scale(image.bullet,(10,40)),-angle+180+90)
+        self.image=pygame.transform.rotate(pygame.transform.scale(image.bullet,(25,35)),-angle+180+90)
         self.rect=self.image.get_rect()
         self.rect.midbottom=position
         speedy = 10
@@ -155,11 +155,11 @@ class Healthbar(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH/2
         self.rect.bottom = 80
 
-#Class TroopsBoss(Class Child)
-class TroopsBoss(pygame.sprite.Sprite):
+#Class AlienBoss(Class Child)
+class AlienBoss(pygame.sprite.Sprite):
     def __init__(self, max_health:int, attack_speed:int = 50):
         pygame.sprite.Sprite.__init__(self)
-        self.source_image = pygame.transform.rotate(pygame.transform.scale(image.troopsBoss,(110,120)),90)
+        self.source_image = pygame.transform.rotate(pygame.transform.scale(image.alienBoss,(110,130)),90)
         self._angle = 180
         self.image = pygame.transform.rotate(self.source_image, self.angle)
         self.rect=self.image.get_rect()
@@ -259,13 +259,13 @@ def waiting_screen():
 #Tampilan awal
 def menu():
     layar.blit(pygame.transform.scale(image.background,(1000,600)),(0,0))
-    draw_text(layar, "STARBORNE STRIFE", 50, WIDTH/2, HEIGHT/4)    
+    draw_text(layar, "STARBORNE STRIFE", 65, WIDTH/2, HEIGHT/7)    
     pygame.display.flip()
     yvar=350
     xvar=500
     draw_text(layar, "START", 55, WIDTH/2, yvar-25) 
-    draw_text(layar, "QUIT",40, WIDTH/2, 500)  
-    pygame.draw.circle(layar, (RED), (xvar,yvar), 85,5)
+    draw_text(layar, "QUIT",30, WIDTH/2, 550)  
+    pygame.draw.circle(layar, (RED), (xvar,yvar), 112,5)
     
     waiting = True
     while waiting:
@@ -283,7 +283,7 @@ def menu():
                     return False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 xpos, ypos = pygame.mouse.get_pos()
-                cek = math.sqrt((xvar - xpos)**2 + (520 - ypos)**2)
+                cek = math.sqrt((xvar - xpos)**2 + (550 - ypos)**2)
                 if cek <= 25:
                     pygame.quit()
                     sys.exit()
@@ -292,15 +292,16 @@ def menu():
 #Tampilan ketika GameOver
 def menuGameOver():
     layar.blit(pygame.transform.scale(image.background,(1000,600)),(0,0))
-    draw_text(layar, "Game Over", 50, WIDTH/2, HEIGHT/4)    
+    draw_text(layar, "Game Over", 50, WIDTH/2, HEIGHT/8)    
 
     yvar=350
     xvar=500
     
     draw_text(layar, "START", 55, WIDTH/2, yvar-25)
-    draw_text(layar, f"Your score : {player.score_val}", 20, WIDTH/2, 223)
-    draw_text(layar, "QUIT",40, WIDTH/2, 500) 
-    pygame.draw.circle(layar, (RED), (xvar,yvar), 85,5)
+    draw_text(layar, f"Your score : {player.score_val}", 20, WIDTH/2, 130)
+    draw_text(layar, f"Your level : {level}", 17, WIDTH/2, 210)
+    draw_text(layar, "QUIT",30, WIDTH/2, 550) 
+    pygame.draw.circle(layar, (RED), (xvar,yvar), 112,5)
     
     waiting = True
     while waiting:
@@ -317,7 +318,7 @@ def menuGameOver():
                     waiting = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 xpos, ypos = pygame.mouse.get_pos()
-                cek = math.sqrt((xvar - xpos)**2 + (520 - ypos)**2)
+                cek = math.sqrt((xvar - xpos)**2 + (550 - ypos)**2)
                 if cek <= 25:
                     pygame.quit()
                     sys.exit()
@@ -344,13 +345,13 @@ while running:
         all_sprites.add(player)
 
         for i in range(4):
-            troops=Troops()
-            all_sprites.add(troops)
-            hazard.add(troops)
+            ufo=Ufo()
+            all_sprites.add(ufo)
+            hazard.add(ufo)
         player.score_val = 0
-        # Test troopsBoss
+        # Test alienBoss
         # if player.score_val % 100 == 0:
-        #     test = troopsBoss(100)
+        #     test = alienBoss(100)
         #     all_sprites.add(test)
         #     hazard.add(test)
     
@@ -371,9 +372,12 @@ while running:
                 player.button=2
                 player.shoot()
             elif event.key==pygame.K_4: #cheat menambah skor +25 dengan keyboard angka 4
-                player.score_val +=25
-                
-        
+                player.score_val +=50
+            elif event.key==pygame.K_5: #cheat untuk menambah health point +1
+                player.life +=1
+            elif event.key==pygame.K_6: #cheat menambah speed tembakan
+                player.shoot_delay -=250
+                  
                 
 
     all_sprites.update()
@@ -381,19 +385,19 @@ while running:
 
     for hit in hits:
         # cek apakah peluru mengenai lawan
-        if isinstance(hit, Troops):
+        if isinstance(hit, Ufo):
             sound.exlp2.play()
             hit.kill()
-            troops=Troops()
-            all_sprites.add(troops)
-            hazard.add(troops)
+            ufo=Ufo()
+            all_sprites.add(ufo)
+            hazard.add(ufo)
             player.score_val +=1
             
             if player.score_val % 30 == 0:
-                hp += 50 #setiap skor kelipatan 30 HP troopsBoss bertambah 50
-                troopsBoss = TroopsBoss(hp)
-                all_sprites.add(troopsBoss)
-                hazard.add(troopsBoss)
+                hp += 50 #setiap skor kelipatan 30 HP alienBoss bertambah 50
+                alienBoss = AlienBoss(hp)
+                all_sprites.add(alienBoss)
+                hazard.add(alienBoss)
                 player.buttonup()
                 level += 1
                 player.life += 1
@@ -402,16 +406,16 @@ while running:
                 all_sprites.add(button)
                 hazard.add(button)
             
-        # cek apakah peluru mengenai troopsBoss        
-        elif isinstance(hit, TroopsBoss): 
+        # cek apakah peluru mengenai alienBoss        
+        elif isinstance(hit, AlienBoss): 
             sound.exlp2.play()
             hit.hurt()
             
         
-    # ketika level lebih dari 2 troops meluncur lebih cepat
+    # ketika level lebih dari 2 alien meluncur lebih cepat
     if level >= 2:
-        Troops.speedx=random.randrange(-5,1)
-        Troops.speedy=random.randrange(5,10)
+        Ufo.speedx=random.randrange(-5,1)
+        Ufo.speedy=random.randrange(5,10)
         
     layar.blit(pygame.transform.scale(image.background,(1000,600)),(0,0))
     draw_text(layar, f"Level {level}", 20, WIDTH/2, HEIGHT-590)
@@ -423,12 +427,12 @@ while running:
     hits = pygame.sprite.spritecollide(player,hazard,False,pygame.sprite.collide_circle)
     # jika player terkena hit, life akan berkurang
     for hit in hits:
-        if isinstance(hit, Troops):
+        if isinstance(hit, Ufo):
             sound.expl.play()
             hit.kill()
-            troops=Troops()
-            all_sprites.add(troops)
-            hazard.add(troops)
+            ufo=Ufo()
+            all_sprites.add(ufo)
+            hazard.add(ufo)
             player.life -= 1
         elif isinstance(hit, Bullet):
             sound.expl.play()
