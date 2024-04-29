@@ -159,7 +159,7 @@ class Healthbar(pygame.sprite.Sprite):
 class TroopsBoss(pygame.sprite.Sprite):
     def __init__(self, max_health:int, attack_speed:int = 50):
         pygame.sprite.Sprite.__init__(self)
-        self.source_image = pygame.transform.rotate(pygame.transform.scale(image.troopsBoss,(120,130)),90)
+        self.source_image = pygame.transform.rotate(pygame.transform.scale(image.troopsBoss,(110,120)),90)
         self._angle = 180
         self.image = pygame.transform.rotate(self.source_image, self.angle)
         self.rect=self.image.get_rect()
