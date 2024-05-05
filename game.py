@@ -20,13 +20,6 @@ pygame.display.set_caption("Starborne Strife")
 fps = pygame.time.Clock()
 background = pygame.image.load(os.path.abspath("image/bg.png"))
 
-pause = False
-
-def pause_screen():
-    draw_text(layar, "Pause", 50, WIDTH / 2, HEIGHT / 2)
-    draw_text(layar, "Press P to Resume", 30, WIDTH / 2, HEIGHT / 2 + 50)
-    # pygame.display.flip()
-
 #Class Player(Class Child)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -368,8 +361,6 @@ while running:
             pygame.quit()
             sys.exit()
         elif event.type==pygame.KEYDOWN:
-            if event.key == pygame.K_p:
-                pause = not pause
             if event.key==pygame.K_SPACE: # keyboard spasi untuk menembak
                 player.shoot()
             elif event.key==pygame.K_1: #cheat menambah skor dengan keyboard angka 1
@@ -391,7 +382,6 @@ while running:
 
     all_sprites.update()
     hits=pygame.sprite.groupcollide(hazard,bullets,False,True)
-
 
     for hit in hits:
         # cek apakah peluru mengenai lawan
@@ -432,9 +422,6 @@ while running:
     all_sprites.draw(layar)
     player.show_score()
     player.show_lifepoints()
-    
-    if pause:
-        pause_screen()
     pygame.display.update()
 
     hits = pygame.sprite.spritecollide(player,hazard,False,pygame.sprite.collide_circle)
@@ -462,3 +449,4 @@ while running:
         
         
 pygame.quit()
+
